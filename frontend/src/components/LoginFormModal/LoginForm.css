@@ -1,0 +1,32 @@
+#modal {
+    font-family: houschka-pro, sans-serif;
+}
+
+#modal-content {
+    min-width: 300px;
+    max-width: 500px;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    align-items: center;
+}
+
+.login-inputs {
+    width: 90%;
+    margin: 2px 0 10px;
+    height: 30px;
+    padding: 0 10px;
+}
+
+.login-labels {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+}
