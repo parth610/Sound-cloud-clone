@@ -24,6 +24,14 @@ form {
     padding: 0 10px;
 }
 
+.login-inputs-errors {
+    width: 90%;
+    margin: 2px 0 10px;
+    height: 30px;
+    padding: 0 10px;
+    border: solid red 1px;
+}
+
 .login-labels {
     display: flex;
     flex-direction: column;
