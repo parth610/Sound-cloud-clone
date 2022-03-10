@@ -47,7 +47,8 @@ function CreateSongComponent() {
             <div>
                 {allSongs.map(song => (
                     <div key={song.id}>
-                        <ReactAudioPlayer src={song.song_url} controls>{song.name}</ReactAudioPlayer>
+                        {song.name}
+                        <ReactAudioPlayer src={song.song_url} controls></ReactAudioPlayer>
                     </div>
                 ))}
             </div>
