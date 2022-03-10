@@ -26,8 +26,9 @@ function CreateSongComponent() {
 
        await dispatch(createSong(data))
 
-       setFile();
+       const form = document.getElementById('create-song-form');
        setSongTitle('');
+       form.reset()
     }
 
     const clickEditSong = (e) => {
@@ -62,7 +63,7 @@ function CreateSongComponent() {
 
     return (
         <div className="create-song-form-container">
-            <form onSubmit={submitFile}>
+            <form id='create-song-form' onSubmit={submitFile}>
                 <label> Title
                     <input
                         type='text'
