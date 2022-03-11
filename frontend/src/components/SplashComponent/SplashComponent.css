@@ -1,5 +1,6 @@
 body {
     width: 100%;
+    margin: 0;
 }
 
 #root {
@@ -9,32 +10,91 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    min-width: 600px;
 }
 
 .home-page {
     width: 100%;
     display: flex;
     justify-content: center;
+
 }
 
 .images-container {
     display: flex;
     justify-content: center;
+    width: 100%;
+    height: 500px;
+}
+
+.images-container-login {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 420px;
 }
 
 .splash-img-1 {
+    display: block;
+    width: 100%;
     max-width: 1920px;
-    width: 1280px;
+    min-width: 960px;
+    object-fit: cover;
+    height: auto;
 }
 
-.splash-button-startup {
+.splash-welcome-user {
     position: absolute;
-    top: 350px;
+    top: 250px;
     font-size: 36px;
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-weight: 300;
+    align-items: center;
+}
+
+.splash-welcome-user > p{
+    margin: 20px 0 0 0;
+    display: flex;
+    align-items: center;
+}
+
+.splash-welcome-user > span {
+    margin: 0 20px 0 5px 0;
+    font-size: 36px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    color: #FF5500;
+}
+
+.splash-button-startup {
+    position: absolute;
+    top: 250px;
+    font-size: 36px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: 300;
+}
+
+.splash-text > div {
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.splash-text {
+    position: absolute;
+    top: 120px;
+    color: white;
+    font-size: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-weight: 300;
 }
 

@@ -1,9 +1,62 @@
 .nav-bar {
     max-width: 1920px;
-    width: 1280px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    align-items: center;
+    padding: 10px 0px;
     position: fixed;
-    top: 1px;
+    top: 0px;
+    background-image: linear-gradient(rgb(36, 36, 36, .8), rgb(58, 58, 58, 0));
+}
+
+.soundcore-home-logo {
+    width: 200px;
+
+}
+
+.soundcore-logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 0 15px;
+}
+.auth-buttons {
+    margin: 10px 15px 0 0;
+}
+
+.login-button {
+    width: fit-content;
+    padding: 0 15px;
+    height: 30px;
+    background-color: rgb(255, 255, 255, 0);
+    border: 1.5px solid white;
+    border-radius: 2px;
+    font-size: 16px;
+    color: white;
+    margin: 0 5px;
+}
+
+.signup-button {
+    width: fit-content;
+    padding: 0 15px;
+    height: 30px;
+    background-color: #FF5500;
+    border: none;
+    border-radius: 2px;
+    font-size: 16px;
+    color: white;
+    margin: 0 5px;
+}
+
+.demo-button {
+    width: fit-content;
+    padding: 0 15px;
+    height: 30px;
+    background-color: #FF5500;
+    border: none;
+    border-radius: 2px;
+    font-size: 16px;
+    color: white;
+    margin: 0 5px;
 }
