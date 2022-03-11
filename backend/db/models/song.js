@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = (sequelize, DataTypes) => {
   const Song = sequelize.define('Song', {
     name: {
@@ -24,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Song.associate = function(models) {
     // associations can be defined here
+    Song.belongsTo(models.User, {foreignKey: 'user_id'});
+    Song.belongsTo(models.Album, {foreignKey: 'album_id'});
+    Song.belongsToMany(models.Playlist, {through: "Playlist_Song_Bridge", foreignKey: 'song_id'});
   };
   return Song;
 };

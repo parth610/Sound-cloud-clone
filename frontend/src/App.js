@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import CreateSongComponent from "./components/SongComponent";
+import AlbumComponent from "./components/AlbumComponent";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,7 +18,10 @@ function App() {
     <>
       <Navigation isLoaded={isLoaded} />
       {sessionUser && (
-        <CreateSongComponent />
+        <div>
+          <CreateSongComponent />
+          <AlbumComponent />
+        </div>
       )}
       {isLoaded && (
         <Switch>
