@@ -17,7 +17,7 @@ export function ModalProvider({ children }) {
         <ModalContext.Provider value={value}>
           {children}
         </ModalContext.Provider>
-        <div className='whoami' ref={modalRef} />
+        <div className='modals-parent' ref={modalRef} />
       </>
     );
   }

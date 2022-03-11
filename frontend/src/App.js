@@ -5,6 +5,7 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import CreateSongComponent from "./components/SongComponent";
 import AlbumComponent from "./components/AlbumComponent";
+import HomeComponent from "./components/SplashComponent";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ function App() {
   return (
     <>
       <Navigation isLoaded={isLoaded} />
+      <HomeComponent />
       {sessionUser && (
         <div>
           <CreateSongComponent />

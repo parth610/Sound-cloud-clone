@@ -1,0 +1,9 @@
+.nav-bar {
+    max-width: 1920px;
+    width: 1280px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    position: fixed;
+    top: 1px;
+}

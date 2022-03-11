@@ -1,0 +1,57 @@
+body {
+    width: 100%;
+}
+
+#root {
+    width: 100%;
+    font-family: houschka-pro, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-page {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.images-container {
+    display: flex;
+    justify-content: center;
+}
+
+.splash-img-1 {
+    max-width: 1920px;
+    width: 1280px;
+}
+
+.splash-button-startup {
+    position: absolute;
+    top: 350px;
+    font-size: 36px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: 300;
+}
+
+.splash-button-startup > p {
+    margin: 20px;
+}
+
+.get-started-button {
+    font-family: houschka-pro, sans-serif;
+    height: 50px;
+    font-size: 24px;
+    color: white;
+    background-color: #FF5500;
+    border: none;
+    border-radius: 3px;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
