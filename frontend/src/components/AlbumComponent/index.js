@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {createAlbum, loadAlbums} from '../../store/album'
+import {createAlbum, loadAlbums, removeAlbum} from '../../store/album'
 import albumDefaultImg from '../../images/music-album.png'
 
 function AlbumComponent() {
@@ -25,6 +25,12 @@ function AlbumComponent() {
             data.append('albumPoster', imgFile);
         }
         await dispatch(createAlbum(data))
+    }
+
+    const deleteAlbumHandle = async (e) => {
+        e.preventDefault();
+        const albumId = e.target.id;
+        dispatch(removeAlbum({albumId}))
     }
 
     return (
@@ -52,6 +58,7 @@ function AlbumComponent() {
                     <div key={album.id}>
                         <img src={album.image_url === 'no-image' || album.image_url === 'empty' ? `${albumDefaultImg}` : `${album.image_url}`} />
                         <p>{album.name}</p>
+                        <button id={album.id} onClick={deleteAlbumHandle}>Delete Album</button>
                     </div>
                 ))}
             </div>

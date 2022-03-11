@@ -59,4 +59,26 @@ router.get('/', requireAuth, asyncHandler(async(req, res) => {
     res.json(loadAlbums)
 }))
 
+router.delete('/:albumId', requireAuth, asyncHandler(async(req, res) => {
+    const albumId = req.params.albumId;
+    const currUser = req.user.dataValues;
+    const deleteAlbum = await Album.findByPk(+albumId);
+    if (deleteAlbum.image_url === 'no-image' || deleteAlbum.image_url === 'empty') {
+        await deleteAlbum.destroy();
+        res.json(deleteAlbum);
+    } else {
+        const linkExtension = deleteAlbum.image_url.split('.');
+        const extension = linkExtension[linkExtension.length - 1];
+        const oldKey = `posters/${deleteAlbum.name}-${currUser.username}.${extension}`
+        await deleteAlbum.destroy();
+        const deleteParams = {
+            Bucket: bucketName,
+            Key: oldKey
+        }
+        await s3.deleteObject(deleteParams, (err, data) => {
+            return res.json(deleteAlbum)
+        })
+    }
+}))
+
 module.exports = router;

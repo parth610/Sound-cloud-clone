@@ -53,6 +53,19 @@ export const loadAlbums = () => async (dispatch) => {
     }
 }
 
+export const removeAlbum = (album_Id) => async (dispatch) => {
+    const {albumId} = album_Id
+    const response = await csrfFetch(`/api/albums/${albumId}`, {
+        method: 'DELETE'
+    })
+
+    if (response.ok) {
+        const deletedAlbum = await response.json();
+
+        dispatch(deleteAlbum(deletedAlbum));
+    }
+}
+
 const initialState = {};
 
 const albumReducer = (state = initialState, action) => {
@@ -70,6 +83,13 @@ const albumReducer = (state = initialState, action) => {
                 newAlbums[alb.id] = alb
             });
             return {...state, ...newAlbums}
+        }
+        case DELETE_ALBUM: {
+            const newState = {...state};
+            console.log('before', newState)
+            delete newState[action.album.id];
+            console.log('after', newState)
+            return newState;
         }
         default:
             return state;
