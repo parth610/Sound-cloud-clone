@@ -69,7 +69,7 @@ router.put('/:songId', requireAuth, asyncHandler(async(req, res) => {
     }
     await s3.copyObject(copyParams, async (err, data) => {
         if (err) {
-            console.log('....................', copyParams)
+            
         } else {
             editedSong.name = updateTitle;
             editedSong.song_url = `https://sound-core.s3.us-west-1.amazonaws.com/${newKey}`

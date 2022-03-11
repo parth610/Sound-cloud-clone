@@ -1,5 +1,4 @@
 import { csrfFetch } from "./csrf";
-import { loadSongs } from "./song";
 const axios = require('axios');
 
 const ADD_ALBUM = 'album/upload';
@@ -35,9 +34,21 @@ const  deleteAlbum = (album) => {
     }
 }
 
-export const createAlbum = (albumData) => async (dispatch) => {
-    const response = await axios.post('/api/albums', albumData)
+export const editAlbum = (albumData) => async (dispatch) => {
+    const albumId = albumData.get('albumId');
+
+    const response = await axios.put(`/api/albums/${albumId}`, albumData)
     console.log(response)
+    if (response.status === 200) {
+        const editedAlbum = response.data
+        console.log(editedAlbum)
+        dispatch(updateAlbum(editedAlbum))
+    }
+}
+
+export const createAlbum = (albumData) => async (dispatch) => {
+    const response = await axios.post(`/api/albums`, albumData)
+
         if (response.status === 200) {
             const newAlbum = response.data.insertAlbum
             dispatch(uploadAlbum(newAlbum))
@@ -86,9 +97,13 @@ const albumReducer = (state = initialState, action) => {
         }
         case DELETE_ALBUM: {
             const newState = {...state};
-            console.log('before', newState)
             delete newState[action.album.id];
-            console.log('after', newState)
+            return newState;
+        }
+        case EDIT_ALBUM: {
+            let newState = {...state};
+            console.log(action.album)
+            newState[action.album.id] = action.album;
             return newState;
         }
         default:

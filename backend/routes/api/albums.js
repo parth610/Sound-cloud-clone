@@ -79,6 +79,95 @@ router.delete('/:albumId', requireAuth, asyncHandler(async(req, res) => {
             return res.json(deleteAlbum)
         })
     }
+}));
+
+router.put('/:albumId', requireAuth, asyncHandler(async(req, res) => {
+    const albumId = req.params.albumId;
+    const currUser = req.user.dataValues;
+    const updateAlbum = await Album.findByPk(+albumId);
+    const form = new formidable.IncomingForm();
+    if (updateAlbum.image_url === 'no-image') {
+        await form.parse(req, async(err, fields, files) => {
+            if (Object.keys(files).length > 0) {
+                await fs.readFile(files.albumPosterNew.filepath, async(err, data) => {
+                    const filenameExtension = files.albumPosterNew.originalFilename.split('.');
+                    const extension = filenameExtension[filenameExtension.length - 1];
+                    const params = {
+                        Bucket: bucketName,
+                        Key: `posters/${fields.albumTitleNew}-${currUser.username}.${extension}`,
+                        Body: data
+                    }
+                    await s3.upload(params, async(err, data) => {
+                        updateAlbum.update({
+                            name: fields.albumTitleNew,
+                            image_url: data.Location
+                        })
+                        res.json(updateAlbum)
+                    })
+                })
+            } else {
+                updateAlbum.name = fields.albumTitleNew;
+                await updateAlbum.save()
+                res.json(updateAlbum);
+            }
+        })
+    }  else {
+        const oldfileextension = updateAlbum.image_url.split('.');
+        const oldExtension = oldfileextension[oldfileextension.length - 1];
+        const oldKey = `posters/${updateAlbum.name}-${currUser.username}.${oldExtension}`
+        await form.parse(req, async(err, fields, files) => {
+            if (Object.keys(files).length > 0) {
+                await fs.readFile(files.albumPosterNew.filepath, async(err, data) => {
+                    const filenameExtension = files.albumPosterNew.originalFilename.split('.');
+                    const extension = filenameExtension[filenameExtension.length - 1];
+
+                    const params = {
+                        Bucket: bucketName,
+                        Key: `posters/${fields.albumTitleNew}-${currUser.username}.${extension}`,
+                        Body: data
+                    }
+                    await s3.upload(params, async(err, data) => {
+                        updateAlbum.update({
+                            name: fields.albumTitleNew,
+                            image_url: data.Location
+                        })
+                        res.json(updateAlbum)
+                    })
+                    const deleteParams = {
+                        Bucket: bucketName,
+                        Key: oldKey
+                    }
+                    await s3.deleteObject(deleteParams, (err, data) => {
+                        if (err) {
+                            console.log(err)
+                        }
+                    })
+                })
+            } else {
+                const newKey = `posters/${fields.albumTitleNew}-${currUser.username}.${oldExtension}`;
+                const copyParams = {
+                    Bucket: bucketName,
+                    Key: newKey,
+                    CopySource: `${bucketName}/${oldKey}`
+                }
+                await s3.copyObject(copyParams, async(err, data) => {
+                    updateAlbum.name = fields.albumTitleNew;
+                    updateAlbum.image_url = `https://sound-core.s3.us-west-1.amazonaws.com/${newKey}`;
+                    await updateAlbum.save();
+                    res.json(updateAlbum)
+                })
+                const deleteParams = {
+                    Bucket: bucketName,
+                    Key: oldKey
+                }
+                await s3.deleteObject(deleteParams, (err, data) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                })
+            }
+        })
+    }
 }))
 
 module.exports = router;

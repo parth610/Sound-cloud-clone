@@ -16,7 +16,7 @@ module.exports = {
         {
           name: 'DefaultAlbum',
           user_id: 1,
-          image_url: 'empty'
+          image_url: 'no-image'
         }
       ], {});
   },
