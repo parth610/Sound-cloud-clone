@@ -3,6 +3,7 @@ import * as sessionActions from '../../store/session';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import './LoginForm.css';
+import soundCoreIcon from '../../images/SoundCore_icon_orange.png'
 
 function LoginForm() {
   const dispatch = useDispatch();
@@ -24,9 +25,11 @@ function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <ul>
-        {errors.map((error, idx) => <li key={idx}>{error}</li>)}
-      </ul>
+        <div className="sound-core-login-icon">
+        <img src={soundCoreIcon}/>
+      </div>
+        {errors.map((error, idx) => <span className='login-errors' key={idx}>{error}</span>)}
+
       <label className='login-labels'>
         Username or Email
         <input className={errors.length > 0 ? 'login-inputs-errors' : 'login-inputs'}
@@ -46,7 +49,7 @@ function LoginForm() {
           required
         />
       </label>
-      <button type="submit">Log In</button>
+      <button className='login-form-button' type="submit">Log In</button>
     </form>
   );
 }

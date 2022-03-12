@@ -48,7 +48,7 @@ router.post('/', requireAuth, asyncHandler(async(req, res, next) => {
 
 }));
 
-router.get('/', requireAuth, asyncHandler(async(req, res) => {
+router.get('/', asyncHandler(async(req, res) => {
     const loadSongs = await Song.findAll();
     res.json(loadSongs)
 }));
@@ -69,7 +69,7 @@ router.put('/:songId', requireAuth, asyncHandler(async(req, res) => {
     }
     await s3.copyObject(copyParams, async (err, data) => {
         if (err) {
-            
+
         } else {
             editedSong.name = updateTitle;
             editedSong.song_url = `https://sound-core.s3.us-west-1.amazonaws.com/${newKey}`

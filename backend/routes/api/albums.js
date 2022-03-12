@@ -54,7 +54,7 @@ router.post('/', requireAuth, asyncHandler(async(req,res) => {
     })
 }))
 
-router.get('/', requireAuth, asyncHandler(async(req, res) => {
+router.get('/', asyncHandler(async(req, res) => {
     const loadAlbums = await Album.findAll();
     res.json(loadAlbums)
 }))

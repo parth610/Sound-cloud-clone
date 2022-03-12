@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 import './SignupForm.css';
+import soundCoreIcon from '../../images/SoundCore_icon_orange.png'
 
 function SignupForm() {
   const dispatch = useDispatch();
@@ -28,11 +29,12 @@ function SignupForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <ul>
-        {errors.map((error, idx) => <li key={idx}>{error}</li>)}
-      </ul>
+      <div className="sound-core-signup-icon">
+        <img src={soundCoreIcon}/>
+      </div>
       <label className="signup-labels">
         Email
+        {errors && errors.includes('Please provide a valid email.') && <p className="signup-error">Please provide a valid email.</p>}
         <input
         className="signup-inputs"
           type="text"
@@ -43,6 +45,8 @@ function SignupForm() {
       </label>
       <label className="signup-labels">
         Username
+        {errors && errors.includes('Please provide a username with at least 4 characters.') && <p className="signup-error">Please provide a username with at least 4 characters.</p>}
+        {errors && errors.includes('Username cannot be an email.') && <p className="signup-error">Username cannot be an email.</p>}
         <input
         className="signup-inputs"
           type="text"
@@ -53,6 +57,7 @@ function SignupForm() {
       </label>
       <label className="signup-labels">
         Password
+        {errors && errors.includes('Password must be 6 characters or more.') && <p className="signup-error">Password must be 6 characters or more.</p>}
         <input
         className="signup-inputs"
           type="password"
@@ -63,6 +68,7 @@ function SignupForm() {
       </label>
       <label className="signup-labels">
         Confirm Password
+        {errors && errors.includes('Confirm Password field must be the same as the Password field') && <p className="signup-error">Confirm Password field must be the same as the Password field</p>}
         <input
         className="signup-inputs"
           type="password"
@@ -71,7 +77,8 @@ function SignupForm() {
           required
         />
       </label>
-      <button type="submit">Sign Up</button>
+      <button className="sign-up-form-button" type="submit">Sign Up</button>
+      {/* <div>Already have an account?</div> */}
     </form>
   );
 }

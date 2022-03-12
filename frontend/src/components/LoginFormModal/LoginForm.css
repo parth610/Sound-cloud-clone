@@ -38,3 +38,26 @@ form {
     width: 100%;
     align-items: flex-start;
 }
+
+.sound-core-login-icon > img {
+    width: 70px;
+}
+
+.sound-core-login-icon {
+    margin-bottom: 20px;
+}
+
+.login-form-button {
+    width: 90%;
+    margin: 20px 0 5px;
+    height: 40px;
+    padding: 0 10px;
+    border: none;
+    background-color: #FF5500;
+    color: white;
+    border-radius: 3px;
+}
+
+.login-errors {
+    color: red;
+}

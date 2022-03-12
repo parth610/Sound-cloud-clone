@@ -30,3 +30,31 @@ form {
     width: 100%;
     align-items: flex-start;
 }
+
+.signup-error {
+    color: red;
+    margin: 0;
+}
+
+.signup-error + input {
+    border: 1px solid red;
+}
+
+.sound-core-signup-icon > img {
+    width: 70px;
+}
+
+.sound-core-signup-icon {
+    margin-bottom: 20px;
+}
+
+.sign-up-form-button {
+    width: 90%;
+    margin: 20px 0 5px;
+    height: 40px;
+    padding: 0 10px;
+    border: none;
+    background-color: #FF5500;
+    color: white;
+    border-radius: 3px;
+}
