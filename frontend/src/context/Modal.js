@@ -51,3 +51,33 @@ export function ModalProvider({ children }) {
           modalNode
       )
   }
+
+  export function CreateSongModal({onCloseSong, children}) {
+    const modalNode = useContext(ModalContext);
+    if (!modalNode) return null;
+
+    return ReactDOM.createPortal(
+        <div id="modal">
+            <div id="modal-background" onClick={onCloseSong} />
+            <div id="modal-content">
+                {children}
+            </div>
+        </div>,
+        modalNode
+    )
+}
+
+export function CreateAlbumModal({onCloseAlbum, children}) {
+  const modalNode = useContext(ModalContext);
+  if (!modalNode) return null;
+
+  return ReactDOM.createPortal(
+      <div id="modal">
+          <div id="modal-background" onClick={onCloseAlbum} />
+          <div id="modal-content">
+              {children}
+          </div>
+      </div>,
+      modalNode
+  )
+}

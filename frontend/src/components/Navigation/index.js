@@ -6,7 +6,7 @@ import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import { login } from '../../store/session';
 import './Navigation.css';
-import soundCoreLogo from '../../images/SoundCore_White.png'
+import soundCoreLogo from '../../images/SoundCore_logo.png'
 
 function Navigation({ isLoaded }){
   const dispatch = useDispatch();

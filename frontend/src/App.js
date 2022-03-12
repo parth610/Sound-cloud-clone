@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
-import CreateSongComponent from "./components/SongComponent";
-import AlbumComponent from "./components/AlbumComponent";
 import HomeComponent from "./components/SplashComponent";
+import MyProfileComponent from "./components/MyProfileComponent";
 
 function App() {
   const dispatch = useDispatch();
@@ -18,13 +17,16 @@ function App() {
   return (
     <>
       <Navigation isLoaded={isLoaded} />
+      <Switch>
+        <Route exact path='/'>
       <HomeComponent />
+        </Route>
       {sessionUser && (
-        <div>
-          <CreateSongComponent />
-          <AlbumComponent />
-        </div>
-      )}
+        <Route path='/:userId'>
+          <MyProfileComponent />
+        </Route>
+          )}
+      </Switch>
       {isLoaded && (
         <Switch>
           <Route>
