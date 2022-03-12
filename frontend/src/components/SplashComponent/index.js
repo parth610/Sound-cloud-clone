@@ -36,7 +36,7 @@ function HomeComponent() {
         const selectedAlbum = allAlbums.find(album => (
             albumId === album.id
         ))
-        if (selectedAlbum.image_url === 'no-image' || selectedAlbum.image_url === 'empty') {
+        if (selectedAlbum?.image_url === 'no-image' || selectedAlbum?.image_url === 'empty') {
             return musicPoster;
         } else {
             return selectedAlbum.image_url
