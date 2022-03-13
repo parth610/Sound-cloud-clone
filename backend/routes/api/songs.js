@@ -39,7 +39,7 @@ router.post('/', requireAuth, asyncHandler(async(req, res, next) => {
                     song_url: data.Location,
                     genre: {"aqustic": "true"},
                     user_id: currUser.id,
-                    album_id: 1
+                    album_id: fields.albumId
                 })
                 res.json({insertSong})
             })

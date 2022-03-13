@@ -9,7 +9,7 @@ function CreateSongFormModal() {
             <button className='create-song-button' onClick={() => setShowCreateSongModal(true)}>Upload New Song</button>
       {showCreateSongModal && (
         <CreateSongModal onCloseSong={() => setShowCreateSongModal(false)}>
-          <CreateSongComponent />
+          <CreateSongComponent onCloseSong={() => setShowCreateSongModal(false)} />
         </CreateSongModal>
       )}
         </>
