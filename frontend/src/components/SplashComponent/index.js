@@ -39,7 +39,7 @@ function HomeComponent() {
         if (selectedAlbum?.image_url === 'no-image' || selectedAlbum?.image_url === 'empty') {
             return musicPoster;
         } else {
-            return selectedAlbum.image_url
+            return selectedAlbum?.image_url
         }
     }
 
