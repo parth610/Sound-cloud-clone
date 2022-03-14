@@ -1,6 +1,7 @@
 # Sound-cloud-clone
 
 This app has AWS storage setup to upload a song and album posters.
+Create new bucket on AWS and add the bucketname, accesskey and secret key in .env file.
 
 #### Clone this repo.
  * git push https://github.com/parth610/react-project.git
