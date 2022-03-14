@@ -59,7 +59,6 @@ function CreateSongComponent({onCloseSong}) {
         } else {
             return;
         }
-
     }
 
 
@@ -69,7 +68,7 @@ function CreateSongComponent({onCloseSong}) {
                 <div key={error}>{error}</div>
             ))}
             <form id='create-song-form' onSubmit={submitFile}>
-                <label> Your Album
+                <label className="edit-album-label"> Your Album
                     {allAlbums.length < 1 &&
                         <div>You need to create an Album in your library to add a song.</div>
                     }
@@ -86,14 +85,14 @@ function CreateSongComponent({onCloseSong}) {
                         }
                     </select>
                 </label>
-                <label> Title
+                <label className="edit-album-label"> Title
                     <input
                         type='text'
                         value={songTitle}
                         onChange={e => setSongTitle(e.target.value)}
                     />
                 </label>
-                <label> Upload Song
+                <label className="edit-album-label"> Upload Song
                     <input
                         filename={file}
                         onChange={e => setFile(e.target.files[0])}

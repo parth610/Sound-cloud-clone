@@ -27,11 +27,14 @@ function MyProfileComponent() {
     const [updateSongId, setUpdateSongId] = useState();
     const [editSongFile, setEditSongFile] = useState()
     const [showEditSongForm, setShowEditSongForm] = useState(false)
+    const [editSongErrors, setEditSongErrors] = useState([])
 
     const [editAlbumTitle, setEditAlbumTitle] = useState('');
     const [editAlbumFile, setEditAlbumFile] = useState();
     const [editAlbumId, setEditAlbumId] = useState()
     const [showEditAlbumForm, setShowEditAlbumForm] = useState(false)
+    const [editAlbumErrors, setEditAlbumErrors] = useState([]);
+
 
     const allSongs = useSelector(state => {
                 return Object.values(state.songs)
@@ -41,6 +44,16 @@ function MyProfileComponent() {
             return Object.values(state.albums);
     })
 
+    let userSongs = [];
+    allSongs.filter(song => {
+        return song.user_id === sessionUser.id
+    }).forEach(song => userSongs.push(song.name))
+
+    let userAlbums = [];
+    allAlbums.filter(album => {
+        return album.user_id === sessionUser.id
+    }).forEach(album => userAlbums.push(album.name))
+
     useEffect(() => {
          dispatch(loadSongs())
        }, [dispatch])
@@ -48,6 +61,25 @@ function MyProfileComponent() {
     useEffect(() => {
         dispatch(loadAlbums())
     }, [dispatch])
+
+    useEffect(() => {
+        let songerrors = [];
+        if (updateSongTitle.length < 1) songerrors.push('Song title can not be empty');
+        // if (userSongs.includes(songTitle)) songerrors.push('Song title can not be repeated in same user library, choose a different name')
+
+        setEditSongErrors(songerrors)
+    }, [updateSongTitle])
+
+    useEffect(() => {
+        let errors = [];
+        // const oldTitle = editAlbumTitle;
+        // const index = userAlbums.indexOf(oldTitle);
+        // userAlbums.splice(index, 1)
+        // console.log(userAlbums)
+        if (!editAlbumTitle.length) errors.push('Album title can not be empty');
+        // if (userAlbums.includes(editAlbumTitle)) errors.push(('Album title can not be repeated in same user library, choose a different name'))
+        setEditAlbumErrors(errors);
+    }, [editAlbumTitle])
 
     const showAlbums = (e) => {
         e.preventDefault();
@@ -100,17 +132,21 @@ function MyProfileComponent() {
                 //     songId: updateSongId,
                 //     updateTitle: updateSongTitle
                 // }
-                const data = new FormData();
-                data.append('updateSongTitle', updateSongTitle);
-                data.append('updateSongId', updateSongId);
-                if (editSongFile) {
-                    data.append('updateSongFile', editSongFile);
-                }
+                if (editSongErrors.length < 1 ) {
+                    const data = new FormData();
+                    data.append('updateSongTitle', updateSongTitle);
+                    data.append('updateSongId', updateSongId);
+                    if (editSongFile) {
+                        data.append('updateSongFile', editSongFile);
+                    }
 
-                await dispatch(editSong(data))
-                setUpdateSongTitle('');
-                setUpdateSongId()
-                setShowEditSongForm(false);
+                    await dispatch(editSong(data))
+                    setUpdateSongTitle('');
+                    setUpdateSongId()
+                    setShowEditSongForm(false);
+                } else {
+                    return;
+                }
             }
 
             const deleteSongSubmit = async (e) => {
@@ -132,13 +168,18 @@ function MyProfileComponent() {
 
         const submitEditAlbumForm = async (e) => {
             e.preventDefault();
-            const data = new FormData();
-            data.append('albumTitleNew', editAlbumTitle);
-            data.append('albumId', editAlbumId)
-            if (editAlbumFile) {
-                data.append('albumPosterNew', editAlbumFile);
+            if(editAlbumErrors.length < 1) {
+                const data = new FormData();
+                data.append('albumTitleNew', editAlbumTitle);
+                data.append('albumId', editAlbumId)
+                if (editAlbumFile) {
+                    data.append('albumPosterNew', editAlbumFile);
+                }
+                await dispatch(editAlbum(data))
+                setShowEditAlbumForm(false)
+            } else {
+                return;
             }
-            await dispatch(editAlbum(data))
         }
 
         const clickonEdit = (e) => {
@@ -225,16 +266,18 @@ function MyProfileComponent() {
 
                     <div>
                     {showEditSongForm &&
-                    <div>
-                        <form onSubmit={editSongSubmit}>
-                        <label> Title
+                    <div className="song-edit-form-container">
+                        <div onClick={e => setShowEditSongForm(false)} className="song-edit-form-background"/>
+                        <div className="song-edit-form">
+                        <form className="edit-album-form-elements" onSubmit={editSongSubmit}>
+                        <label className="edit-album-label"> Title
                         <input
                             type='text'
                             value={updateSongTitle}
                             onChange={e => setUpdateSongTitle(e.target.value)}
                         />
                         </label>
-                        <label> Update Song (optional)
+                        <label className="edit-album-label"> Update Song (optional)
                             <input
                                  filename={editSongFile}
                                  onChange={e => setEditSongFile(e.target.files[0])}
@@ -244,33 +287,37 @@ function MyProfileComponent() {
                         </label>
                         <button type="submit">Save Changes</button>
                         </form>
+                        </div>
                     </div>
                     }
                     </div>
 
                     {showEditAlbumForm &&
-                    <div className="album-edit-form-container">
-                        <div onClick={e => setShowEditAlbumForm(false)} className='album-edit-form-background'/>
-                <div className="album-edit-form">
-                    <form onSubmit={submitEditAlbumForm}>
-                        <label>Album Title
-                            <input
-                                type='text'
-                                value={editAlbumTitle}
-                                onChange={e => setEditAlbumTitle(e.target.value)}
-                            />
-                        </label>
-                        <label> Album Poster (optional)
-                            <input
-                                 filename={editAlbumFile}
-                                 onChange={e => setEditAlbumFile(e.target.files[0])}
-                                 type='file'
-                                 accept="image/*"
-                            />
-                        </label>
-                            <button type="submit">Save Changes</button>
-                    </form>
-                </div>
+                    <div className='album-edit-form-container'>
+                    <div onClick={e => setShowEditAlbumForm(false)} className='album-edit-form-background'/>
+                    <div className="album-edit-form">
+                        {editAlbumErrors.length > 0 && editAlbumErrors.map(error => (
+                            <div key={error}>{error}</div>
+                        ))}
+                        <form className="edit-album-form-elements" onSubmit={submitEditAlbumForm}>
+                            <label className="edit-album-label">Album Title
+                                <input
+                                    type='text'
+                                    value={editAlbumTitle}
+                                    onChange={e => setEditAlbumTitle(e.target.value)}
+                                />
+                            </label>
+                            <label className="edit-album-label"> Album Poster (optional)
+                                <input
+                                     filename={editAlbumFile}
+                                     onChange={e => setEditAlbumFile(e.target.files[0])}
+                                     type='file'
+                                     accept="image/*"
+                                />
+                            </label>
+                                <button type="submit">Save Changes</button>
+                        </form>
+                    </div>
                     </div>
                     }
 

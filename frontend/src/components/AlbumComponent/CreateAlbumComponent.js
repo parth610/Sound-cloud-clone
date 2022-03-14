@@ -41,7 +41,7 @@ function CreateAlbumComponent({onCloseAlbum}) {
                 data.append('albumPoster', imgFile);
             }
             await dispatch(createAlbum(data))
-            const form = document.getElementById('create-album-form');
+            const form = document.getElementById('create-album-form-id');
             setAlbumTitle('')
             form.reset()
             onCloseAlbum()
@@ -55,15 +55,15 @@ function CreateAlbumComponent({onCloseAlbum}) {
             {albumErrors.length > 0 && albumErrors.map(error => (
                 <div key={error}>{error}</div>
             ))}
-            <form className="create-album-form" onSubmit={submitAlbumForm}>
-                <label>Album Title
+            <form id='create-album-form-id' className="create-album-form" onSubmit={submitAlbumForm}>
+                <label className="edit-album-label">Album Title
                     <input
                         type='text'
                         value={albumTitle}
                         onChange={e => setAlbumTitle(e.target.value)}
                     />
                 </label>
-                <label> Album Poster (optional)
+                <label className="edit-album-label"> Album Poster (optional)
                     <input
                          filename={imgFile}
                          onChange={e => setImgFile(e.target.files[0])}

@@ -60,15 +60,94 @@
     left: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .album-edit-form {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: fit-content;
+    padding: 10px 20px;
+    height: fit-content;
+}
+
+.album-edit-form-container {
     position: fixed;
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.song-edit-form-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.song-edit-form-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.song-edit-form {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: white;
+    width: fit-content;
+    padding: 10px 20px;
+    height: fit-content;
+}
+
+.edit-album-form-elements {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-album-label {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+}
+
+.edit-album-label > input {
+    height: 30px;
+}
+
+form > button {
+    width: fit-content;
+    height: 25px;
+}
+
+.create-song-button {
+    background-color: #FF5500;
+    color: white;
+    padding: 5px;
+    height: 50px;
+    border: none;
+    margin: 10px;
 }
