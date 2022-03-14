@@ -38,10 +38,10 @@ export const editAlbum = (albumData) => async (dispatch) => {
     const albumId = albumData.get('albumId');
 
     const response = await axios.put(`/api/albums/${albumId}`, albumData)
-    console.log(response)
+
     if (response.status === 200) {
         const editedAlbum = response.data
-        console.log(editedAlbum)
+        
         dispatch(updateAlbum(editedAlbum))
     }
 }

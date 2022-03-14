@@ -24,7 +24,8 @@ function MyProfileComponent() {
     const [showSelectedAlbumSongs, setShowSelectedAlbumSongs] = useState(false)
 
     const [updateSongTitle, setUpdateSongTitle] = useState('')
-    const [updateSongId, setUpdateSongId] = useState()
+    const [updateSongId, setUpdateSongId] = useState();
+    const [editSongFile, setEditSongFile] = useState()
     const [showEditSongForm, setShowEditSongForm] = useState(false)
 
     const [editAlbumTitle, setEditAlbumTitle] = useState('');
@@ -95,11 +96,18 @@ function MyProfileComponent() {
 
             const editSongSubmit = async (e) => {
                 e.preventDefault();
-                const data = {
-                    songId: updateSongId,
-                    updateTitle: updateSongTitle
+                // const data = {
+                //     songId: updateSongId,
+                //     updateTitle: updateSongTitle
+                // }
+                const data = new FormData();
+                data.append('updateSongTitle', updateSongTitle);
+                data.append('updateSongId', updateSongId);
+                if (editSongFile) {
+                    data.append('updateSongFile', editSongFile);
                 }
-                dispatch(editSong(data))
+
+                await dispatch(editSong(data))
                 setUpdateSongTitle('');
                 setUpdateSongId()
                 setShowEditSongForm(false);
@@ -111,9 +119,14 @@ function MyProfileComponent() {
                 dispatch(removeSong({songId}))
             }
 // album edit and delete functions
-const deleteAlbumHandle = async (e) => {
+        const deleteAlbumHandle = async (e) => {
             e.preventDefault();
             const albumId = e.target.id;
+            const thisAlbumSongs = allSongs.filter(song => song.album_id === +albumId);
+            for (let i = 0; i < thisAlbumSongs.length; i++) {
+                const songId = thisAlbumSongs[i].id;
+                dispatch(removeSong({songId}))
+            }
             dispatch(removeAlbum({albumId}))
         }
 
@@ -141,7 +154,7 @@ const deleteAlbumHandle = async (e) => {
     return (
         <div className="user-profile-page">
             <div className="image-container-user-profile">
-                <img className="user-wall-image" src={userWallpaper}/>
+                <img className="user-wall-image" alt='user-cover-keyboard' src={userWallpaper}/>
                 <div className="user-profile-wall-text">Welcome to your own Studio!<span>{sessionUser.username}</span></div>
                 <div className="create-buttons-container">
                     <CreateSongFormModal />
@@ -162,7 +175,7 @@ const deleteAlbumHandle = async (e) => {
                 <div key={song.id}>
                 <div onClick={e => setAudioPlayerSrc(song.song_url)} className="song-card" >
                     <div></div>
-                    <img src={findAlbumPoster(song.album_id)}/>
+                    <img alt={`album-poster${song.album_id}`} src={findAlbumPoster(song.album_id)}/>
                     <div>{song.name}</div>
                     </div>
                     <button id={song.id} onClick={clickEditSong}>Edit</button>
@@ -181,7 +194,7 @@ const deleteAlbumHandle = async (e) => {
                 .map(album => (
                     <div key={album.id}>
                     <div className="song-card" id={album.id} onClick={selectedAlbum}>
-                        <img src={album.image_url === 'no-image' || album.image_url === 'empty' ? `${albumdefaultimg}` : album.image_url}></img>
+                        <img alt={`album-poster-${album.id}`} src={album.image_url === 'no-image' || album.image_url === 'empty' ? `${albumdefaultimg}` : album.image_url}></img>
                         <div>{album.name}</div>
                     </div>
                     <button id={album.id} onClick={deleteAlbumHandle}>Delete Album</button>
@@ -197,7 +210,7 @@ const deleteAlbumHandle = async (e) => {
                         <div key={song.id}>
                             <div onClick={e => setAudioPlayerSrc(song.song_url)} className="song-card" >
                                 <div></div>
-                                <img src={musicPoster}/>
+                                <img alt={`music-default-poster`} src={musicPoster}/>
                                 <div>{song.name}</div>
                                 </div>
                                 <button id={song.id} onClick={clickEditSong}>Edit</button>
@@ -221,6 +234,14 @@ const deleteAlbumHandle = async (e) => {
                             onChange={e => setUpdateSongTitle(e.target.value)}
                         />
                         </label>
+                        <label> Update Song (optional)
+                            <input
+                                 filename={editSongFile}
+                                 onChange={e => setEditSongFile(e.target.files[0])}
+                                 type='file'
+                                 accept="audio/*"
+                            />
+                        </label>
                         <button type="submit">Save Changes</button>
                         </form>
                     </div>
@@ -228,6 +249,8 @@ const deleteAlbumHandle = async (e) => {
                     </div>
 
                     {showEditAlbumForm &&
+                    <div className="album-edit-form-container">
+                        <div onClick={e => setShowEditAlbumForm(false)} className='album-edit-form-background'/>
                 <div className="album-edit-form">
                     <form onSubmit={submitEditAlbumForm}>
                         <label>Album Title
@@ -237,7 +260,7 @@ const deleteAlbumHandle = async (e) => {
                                 onChange={e => setEditAlbumTitle(e.target.value)}
                             />
                         </label>
-                        <label> Album Poster
+                        <label> Album Poster (optional)
                             <input
                                  filename={editAlbumFile}
                                  onChange={e => setEditAlbumFile(e.target.files[0])}
@@ -248,6 +271,7 @@ const deleteAlbumHandle = async (e) => {
                             <button type="submit">Save Changes</button>
                     </form>
                 </div>
+                    </div>
                     }
 
             <div className="footer">

@@ -9,7 +9,7 @@ function CreateAlbumFormModal() {
             <button className='create-song-button' onClick={() => setShowCreateAlbumModal(true)}>Create New Album</button>
       {showCreateAlbumModal && (
         <CreateAlbumModal onCloseAlbum={() => setShowCreateAlbumModal(false)}>
-          <CreateAlbumComponent />
+          <CreateAlbumComponent onCloseAlbum={() => setShowCreateAlbumModal(false)}/>
         </CreateAlbumModal>
       )}
         </>

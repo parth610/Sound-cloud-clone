@@ -58,7 +58,7 @@ export const loadSongs = () => async (dispatch) => {
 export const createSong = (songData) => async (dispatch) => {
 
     const response = await axios.post('/api/songs', songData)
-   
+
     if (response.status === 200) {
         const newSong = response.data.insertSong;
 
@@ -67,13 +67,11 @@ export const createSong = (songData) => async (dispatch) => {
 }
 
 export const editSong = (songData) => async (dispatch) => {
-    const {updateTitle, songId} = songData;
-    const response = await csrfFetch(`/api/songs/${songId}`, {
-        method: 'PUT',
-        body: JSON.stringify({updateTitle})
-    })
-    if (response.ok) {
-        const updatedSongDetails = await response.json();
+    const songId = songData.get('updateSongId')
+    const response = await axios.put(`/api/songs/${songId}`, songData)
+    if (response.status === 200) {
+        const updatedSongDetails = response.data;
+
         dispatch(updateSong(updatedSongDetails))
     }
 }

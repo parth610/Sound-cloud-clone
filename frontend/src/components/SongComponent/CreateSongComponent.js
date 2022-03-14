@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createSong} from "../../store/song";
+import { createSong, loadSongs} from "../../store/song";
 import { loadAlbums} from "../../store/album";
 
 
@@ -10,12 +10,35 @@ function CreateSongComponent({onCloseSong}) {
 
     const [file, setFile] = useState();
     const [songTitle, setSongTitle] = useState('');
-    const [getAlbumId, setGetAlbumId] = useState()
+    const [getAlbumId, setGetAlbumId] = useState();
+    const [songErrors, setSongErrors] = useState([]);
 
     const allAlbums = useSelector(state => {
         return Object.values(state.albums);
     })
 
+    const allSongs = useSelector(state => {
+        return Object.values(state.songs)
+    })
+
+    let userSongs = [];
+    allSongs.filter(song => {
+        return song.user_id === sessionUser.id
+    }).forEach(song => userSongs.push(song.name))
+
+    useEffect(() => {
+        let errors = [];
+        if (songTitle.length < 1) errors.push('Song title can not be empty');
+        if (userSongs.includes(songTitle)) errors.push('Song title can not be repeated in same user library, choose a different name')
+        if (!file) errors.push('You must select an audio file from your local drive');
+        if (!getAlbumId) errors.push('Please select an Album or create new')
+
+        setSongErrors(errors)
+    }, [songTitle, file, getAlbumId])
+
+    useEffect(() => {
+        dispatch(loadSongs())
+    }, [dispatch])
 
     useEffect(() => {
         dispatch(loadAlbums())
@@ -23,21 +46,28 @@ function CreateSongComponent({onCloseSong}) {
 
     const submitFile = async (e) => {
         e.preventDefault();
-        const data = new FormData();
-        data.append('audioFile', file);
-        data.append('songTitle', songTitle);
-        data.append('albumId', getAlbumId)
-        await dispatch(createSong(data))
-        const form = document.getElementById('create-song-form');
-        setSongTitle('');
-        form.reset()
-        onCloseSong()
+        if (!songErrors.length) {
+            const data = new FormData();
+            data.append('audioFile', file);
+            data.append('songTitle', songTitle);
+            data.append('albumId', getAlbumId)
+            await dispatch(createSong(data))
+            const form = document.getElementById('create-song-form');
+            setSongTitle('');
+            form.reset()
+            onCloseSong()
+        } else {
+            return;
+        }
 
     }
 
 
     return (
         <div className="create-song-form-container">
+            {songErrors.length > 0 && songErrors.map(error => (
+                <div key={error}>{error}</div>
+            ))}
             <form id='create-song-form' onSubmit={submitFile}>
                 <label> Your Album
                     {allAlbums.length < 1 &&

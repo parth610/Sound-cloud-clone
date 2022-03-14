@@ -54,38 +54,68 @@ router.get('/', asyncHandler(async(req, res) => {
 }));
 
 router.put('/:songId', requireAuth, asyncHandler(async(req, res) => {
-    const {updateTitle} = req.body;
+
     const currUser = req.user.dataValues;
     const songId = req.params.songId;
     const editedSong = await Song.findByPk(+songId);
+    const form = new formidable.IncomingForm();
     const linkExtension = editedSong.song_url.split('.');
     const extension = linkExtension[linkExtension.length - 1];
     const oldKey = `${editedSong.name}-${currUser.username}.${extension}`
-    const newKey =  `${updateTitle}-${currUser.username}.${extension}`
-    const copyParams = {
-        Bucket: bucketName,
-        Key: newKey,
-        CopySource: `${bucketName}/${oldKey}`
-    }
-    await s3.copyObject(copyParams, async (err, data) => {
-        if (err) {
+    await form.parse(req, async(err, fields, files) => {
+        if (Object.keys(files).length > 0) {
+            await fs.readFile(files.updateSongFile.filepath, async(err, data) => {
+                const newFileNameExtension = files.updateSongFile.originalFilename.split('.');
+                const newExtension = newFileNameExtension[newFileNameExtension.length - 1];
 
+                const newParams = {
+                    Bucket: bucketName,
+                    Key: `${fields.updateSongTitle}-${currUser.username}-${newExtension}`,
+                    Body: data
+                }
+                await s3.upload(newParams, async(err, data) => {
+                    editedSong.update({
+                        name: fields.updateSongTitle,
+                        song_url: data.Location
+                    })
+                    res.json(editedSong)
+                })
+                const deleteParams = {
+                    Bucket: bucketName,
+                    Key: oldKey
+                }
+                await s3.deleteObject(deleteParams, (err, data) => {
+                    if (err) console.log(err)
+                })
+            })
         } else {
-            editedSong.name = updateTitle;
-            editedSong.song_url = `https://sound-core.s3.us-west-1.amazonaws.com/${newKey}`
-            await editedSong.save();
-            res.json(editedSong)
-        }
-    })
+            const newKey =  `${fields.updateSongTitle}-${currUser.username}.${extension}`
+            const copyParams = {
+                Bucket: bucketName,
+                Key: newKey,
+                CopySource: `${bucketName}/${oldKey}`
+            }
+            await s3.copyObject(copyParams, async (err, data) => {
+                if (err) {
 
-    const deleteParams = {
-        Bucket: bucketName,
-        Key: oldKey
-    }
+                } else {
+                    editedSong.name = fields.updateSongTitle;
+                    editedSong.song_url = `https://sound-core.s3.us-west-1.amazonaws.com/${newKey}`
+                    await editedSong.save();
+                    res.json(editedSong)
+                }
+            })
 
-    await s3.deleteObject(deleteParams, (err, data) => {
-        if (err) {
-            console.log(err)
+            const deleteParams = {
+                Bucket: bucketName,
+                Key: oldKey
+            }
+
+            await s3.deleteObject(deleteParams, (err, data) => {
+                if (err) {
+                    console.log(err)
+                }
+            })
         }
     })
 }))
